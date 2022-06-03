@@ -1,6 +1,5 @@
 var data = [
-    {id: "1", title: "Angular", author: "John"},
-    {id: "2", title: "React", author: "Michael"}
+    {id: "1", name: "John", phone: "123", address: "1000 N 4th ST"},
 ]
 exports.getAll = (req, res) => {
     res.send(data)
@@ -21,11 +20,10 @@ exports.create = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const {title, author, id} = req.body;
+    const {id} = req.body;
     for(var i = 0; i < data.length; ++i){
         if(data[i].id === id){
-            data[i].title = title;
-            data[i].author = author;
+            data[i] = {...req.body}
         }
     }
     res.send({success: 1});
