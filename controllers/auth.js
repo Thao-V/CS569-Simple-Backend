@@ -15,25 +15,29 @@ var users = [
 
 let PRIVATE_KEY = "CS569-2022"
 exports.login = async (req, res) => {
+    
     const { username, password } = req.body;
     if (username && password) {
         const user = users.find(x => x.username = username);
+        console.log(user)
         if (user) {
             if (bcrypt.compareSync(password, user.password)) {
                 //Create access token here
                 const accessToken = jwt.sign(
                     { username, role: user.role, id: user._id },
                     PRIVATE_KEY, { expiresIn: 4 * 60 * 60 });
-                res.send(accessToken);
+                console.log(1)
+                res.send({success: true, token: accessToken});
             } else {
-                res.send('Wrong password')
+                console.log(2)
+                res.send({success: false, message: 'Wrong password'})
             }
 
         } else {
-            res.send('The user is not found')
+            res.send({success: false, message: 'The user is not found'})
         }
     } else {
-        res.send('Please provide the username and password')
+        res.send({success: false, message: 'Please provide the username and password'})
     }
 }
 
@@ -44,9 +48,9 @@ exports.authorize = (req, res, next) => {
             req.user = user;
             if (err) {
                 if (err.message.includes('expired')) {
-                    res.send('Token is expired, please login again')
+                    res.send({success: false, message: 'Token is expired, please login again'})
                 } else {
-                    res.status(403).send('Forbidden');
+                    res.status(403).send({success: false, message: 'Forbidden'});
                 }
             }
             else {
@@ -54,7 +58,7 @@ exports.authorize = (req, res, next) => {
             }
         })
     } else {
-        res.status(401).send('Unauthenticated');
+        res.status(401).send({success: false, message: 'Unauthenticated'});
     }
 }
 
@@ -62,7 +66,7 @@ exports.adminAuthorize = (req, res, next) => {
     if (req.user.role === 'admin') {
         next();
     } else {
-        res.send("Unauthorized. Only admin can change product")
+        res.send({success: false, message: "Unauthorized. Only admin can change product"})
     }
 }
 
