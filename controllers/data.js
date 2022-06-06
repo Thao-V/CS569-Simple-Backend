@@ -1,5 +1,6 @@
 var data = [
-    {id: "1", name: "John", phone: "123", address: "1000 N 4th ST"},
+    {id: "1", title: "Angular", authors: ["Thao", "Michael"]},
+    {id: "2", title: "React", authors: ["Thao", "Michael"]},
 ]
 exports.getAll = (req, res) => {
     res.send(data)
