@@ -1,19 +1,24 @@
 var data = [
-    {id: "1", title: "Angular", authors: ["Thao", "Michael"]},
-    {id: "2", title: "React", authors: ["Thao", "Michael"]},
+    {
+        id: "1",
+        first_name: "Thao",
+        last_name: "Vu",
+        emai: "thaovu@miu.edu",
+        phone: "123"
+    },
 ]
 exports.getAll = (req, res) => {
     res.send(data)
 }
 
 exports.getData = (req, res) => {
-    let {id} = req.params;
+    let { id } = req.params;
     let item = data.find(item => item.id === id)
     res.send(item);
 }
 
 exports.create = (req, res) => {
-    let item = {...req.body};
+    let item = { ...req.body };
     console.log(req.body);
     item.id = '' + (data.length + 1);
     data.push(item);
@@ -21,16 +26,16 @@ exports.create = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    const {id} = req.body;
-    for(var i = 0; i < data.length; ++i){
-        if(data[i].id === id){
-            data[i] = {...req.body}
+    const { id } = req.body;
+    for (var i = 0; i < data.length; ++i) {
+        if (data[i].id === id) {
+            data[i] = { ...req.body }
         }
     }
-    res.send({success: 1});
+    res.send({ success: 1 });
 }
 
 exports.delete = (req, res) => {
     data = data.filter(item => item.id !== req.body.id)
-    res.send({success: 1});
+    res.send({ success: 1 });
 }
