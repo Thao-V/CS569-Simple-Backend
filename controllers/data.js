@@ -8,13 +8,13 @@ var data = [
     },
 ]
 exports.getAll = (req, res) => {
-    res.send(data)
+    res.send({success: true, data: data})
 }
 
 exports.getData = (req, res) => {
     let { id } = req.params;
     let item = data.find(item => item.id === id)
-    res.send(item);
+    res.send({success: true, data: item});
 }
 
 exports.create = (req, res) => {
@@ -22,7 +22,7 @@ exports.create = (req, res) => {
     console.log(req.body);
     item.id = '' + (data.length + 1);
     data.push(item);
-    res.send(item);
+    res.send({success: true, data: item});
 }
 
 exports.update = (req, res) => {
@@ -32,10 +32,10 @@ exports.update = (req, res) => {
             data[i] = { ...req.body }
         }
     }
-    res.send({ success: 1 });
+    res.send({ success: true });
 }
 
 exports.delete = (req, res) => {
     data = data.filter(item => item.id !== req.body.id)
-    res.send({ success: 1 });
+    res.send({ success: true });
 }

@@ -7,7 +7,7 @@ var users = [
         password: '$2b$08$vN0G2DuhZjBgDi0.MXzEVO1/qPbzQV4gRpF1a41tiAKeb8lYxXe3e',
         email: 'thaovu@miu.edu',
         phone: '12345',
-        role: 'user',//admin or user
+        role: 'admin',//admin or user
         address: 'Fairfield, IA'
     },
 
@@ -17,6 +17,7 @@ let PRIVATE_KEY = "CS569-2022"
 exports.login = async (req, res) => {
     
     const { username, password } = req.body;
+    console.log('body: ', req.body)
     if (username && password) {
         const user = users.find(x => x.username = username);
         console.log(user)
@@ -26,10 +27,8 @@ exports.login = async (req, res) => {
                 const accessToken = jwt.sign(
                     { username, role: user.role, id: user._id },
                     PRIVATE_KEY, { expiresIn: 4 * 60 * 60 });
-                console.log(1)
                 res.send({success: true, token: accessToken});
             } else {
-                console.log(2)
                 res.send({success: false, message: 'Wrong password'})
             }
 
@@ -71,14 +70,15 @@ exports.adminAuthorize = (req, res, next) => {
 }
 
 exports.add = async (req, res) => {
+    console.log("add new: ", req.body)
     let data = {...req.body};
     data.password = bcrypt.hashSync(data.password, 8);//hashing
     data.id = users.length;
     users.push(data)
-    res.send(data)
+    res.send({success: true, data: data})
 }
 
 
 exports.getAll = (req, res) => {
-    res.send(users)
+    res.send({success: true, data: users})
 }
